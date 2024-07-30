@@ -1,0 +1,58 @@
+.payment-container {
+    display: flex;
+    /* Xếp các biểu tượng theo hàng ngang */
+    overflow-x: auto;
+    /* Thêm thanh cuộn ngang nếu cần */
+    padding: 10px 20px;
+    /* Thêm padding xung quanh khung */
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    white-space: nowrap;
+    /* Ngăn cách các biểu tượng xuống dòng */
+    max-width: 100%;
+    /* Đảm bảo khung có thể mở rộng theo chiều rộng của phần tử chứa */
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    margin: 0 10px;
+    /* Khoảng cách giữa các nhóm */
+    position: relative;
+    /* Đặt vị trí tương đối cho phần tử chứa */
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    margin: 0 10px;
+    /* Khoảng cách giữa các nhóm */
+}
+
+.payment-option input[type="radio"] {
+    margin-right: 10px;
+    /* Khoảng cách giữa radio button và hình ảnh */
+    margin-left: -10px;
+    /* Xích radio button qua bên trái */
+}
+
+
+.payment-icon {
+    width: 200px !important;
+    /* Tăng kích thước hình ảnh */
+    height: auto;
+    /* Giữ tỷ lệ khung hình gốc */
+}
+
+
+.divider {
+    display: inline-block;
+    width: 2px;
+    /* Độ rộng của divider */
+    height: 80px;
+    /* Chiều cao của divider, bạn có thể điều chỉnh kích thước này */
+    background-color: #ccc;
+    margin: 0 15px;
+    /* Khoảng cách giữa divider và các biểu tượng */
+}
