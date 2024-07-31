@@ -4,59 +4,71 @@ import { store } from "../lib/store";
 import { config } from "../../config";
 
 const CheckoutBtn = ({ products }: { products: ProductProps[] }) => {
-    const { currentUser } = store();
-    const publishableKey =
-        "pk_test_51Pi5GTLoolZeKyPiVu589gefiOaGKJeI2QY9pOkpul83c0xdzqHPPmLJ7DQ5qBI6wm8stgxNqbZYHrDu9qFkLq0v00vroIayas";
-    const stripePromise = loadStripe(publishableKey);
+  const { currentUser } = store();
+  const publishableKey =
+    "pk_test_51Pi5GTLoolZeKyPiVu589gefiOaGKJeI2QY9pOkpul83c0xdzqHPPmLJ7DQ5qBI6wm8stgxNqbZYHrDu9qFkLq0v00vroIayas";
+  const stripePromise = loadStripe(publishableKey);
 
-    interface RedirectToCheckoutResult {
-        error?: StripeError;
-    }
+  interface RedirectToCheckoutResult {
+    error?: StripeError;
+  }
 
-    const handleCheckout = async () => {
-        const stripe = await stripePromise;
-        const response = await fetch(`${config?.baseUrl}/checkout`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                items: products,
-                email: currentUser?.email,
-            }),
-        });
-        const checkoutSession = await response.json();
-        const result: RedirectToCheckoutResult | undefined = await stripe?.redirectToCheckout({
-            sessionId: checkoutSession.id,
-        });
-
-        if (result?.error) {
-            window.alert(result.error.message);
-        }
+  const handleCheckout = async () => {
+    const stripe = await stripePromise;
+    const requestBody = {
+      items: products,
+      email: currentUser?.email,
     };
 
-    return (
-        <div className="mt-6">
-            {currentUser ? (
-                <button
-                    onClick={handleCheckout}
-                    type="submit"
-                    className="w-full rounded-md border border-transparent bg-gray-800 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-black focus:outline-none focus:ring-2 focus:ring-skyText focus:ring-offset-2 focus:ring-offset-gray-50 duration-200"
-                >
-                    Checkout
-                </button>
-            ) : (
-                <button className="w-full text-base text-white text-center rounded-md border border-transparent bg-gray-500 px-4 py-3 cursor-not-allowed">
-                    Checkout
-                </button>
-            )}
-            {!currentUser && (
-                <p className="mt-2 text-sm font-medium text-red-500 text-center">
-                    Need to sign in to make checkout
-                </p>
-            )}
-        </div>
-    );
+    console.log("Request Body: ", requestBody); // Log the request body for debugging
+
+    const response = await fetch(`${config?.baseUrl}/checkout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Server Error: ", errorText); // Log the error response for debugging
+      window.alert(`Error: ${errorText}`);
+      return;
+    }
+
+    const checkoutSession = await response.json();
+    const result: RedirectToCheckoutResult | undefined = await stripe?.redirectToCheckout({
+      sessionId: checkoutSession.id,
+    });
+
+    if (result?.error) {
+      window.alert(result.error.message);
+    }
+  };
+
+  return (
+    <div className="mt-6">
+      {currentUser ? (
+        <button
+          onClick={handleCheckout}
+          type="submit"
+          className="w-full rounded-md border border-transparent bg-gray-800 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-black focus:outline-none focus:ring-2 focus:ring-skyText focus:ring-offset-2 focus:ring-offset-gray-50 duration-200"
+        >
+          Checkout
+        </button>
+      ) : (
+        <button className="w-full text-base text-white text-center rounded-md border border-transparent bg-gray-500 px-4 py-3 cursor-not-allowed">
+          Checkout
+        </button>
+      )}
+      {!currentUser && (
+        <p className="mt-2 text-sm font-medium text-red-500 text-center">
+          Need to sign in to make checkout
+        </p>
+      )}
+    </div>
+  );
 };
 
 export default CheckoutBtn;
