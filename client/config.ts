@@ -8,7 +8,7 @@ interface Config {
     switch (server) {
       case "production":
         config = {
-          baseUrl: "https://ecommerce-2024-new.vercel.app", // Update with your actual production URL
+          baseUrl: "", // Update with your actual production URL
         };
         break;
       case "local":
@@ -23,6 +23,6 @@ interface Config {
     return config;
   };
   
-  export const selectServer = "local";
+  export const selectServer = "production";
   export const config = checkConfig(selectServer) as Config;
   
