@@ -8,7 +8,7 @@ interface Config {
     switch (server) {
       case "production":
         config = {
-          baseUrl: "https://ecommerce-deploy-eight.vercel.app", // Update with your actual production URL
+          baseUrl: "https://ecommercedeploy-nine.vercel.app", // Update with your actual production URL
         };
         break;
       case "local":
